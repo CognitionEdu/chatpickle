@@ -2,6 +2,14 @@ import LexRuntime from 'aws-sdk/clients/lexruntime';
 import get from 'lodash.get';
 import { BotClient } from './BotClient';
 
+function generateUUID(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = (Math.random() * 16) | 0;
+        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
+
 export default class LexClient extends BotClient {
     private botName: string;
     private botAlias: string;
@@ -15,7 +23,7 @@ export default class LexClient extends BotClient {
         super(botContext, userContext);
         this.botName = this.botContext.botName;
         this.botAlias = this.botContext.botAlias;
-        this.userId = `${this.userContext.userId}-${Date.now()}`;
+        this.userId = generateUUID();
         this.lastResponse = null;
         this.sessionAttributes = this.userContext.userAttributes;
 
