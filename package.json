@@ -37,11 +37,13 @@
         "prepublish": "npm run build"
     },
     "dependencies": {
+        "@types/uuid": "^8.3.4",
         "aws-sdk": "^2.880.0",
         "chai": "^4.3.4",
         "cucumber": "^6.0.5",
         "lodash.get": "^4.4.2",
-        "regex-parser": "^2.2.11"
+        "regex-parser": "^2.2.11",
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "@types/jest": "^26.0.22",
