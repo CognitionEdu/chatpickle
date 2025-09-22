@@ -1,5 +1,6 @@
 import LexRuntime from 'aws-sdk/clients/lexruntime';
 import get from 'lodash.get';
+import { v4 as uuidv4 } from 'uuid';
 import { BotClient } from './BotClient';
 
 export default class LexClient extends BotClient {
@@ -15,7 +16,7 @@ export default class LexClient extends BotClient {
         super(botContext, userContext);
         this.botName = this.botContext.botName;
         this.botAlias = this.botContext.botAlias;
-        this.userId = `${this.userContext.userId}-${Date.now()}`;
+        this.userId = `${this.userContext.userId}-${uuidv4()}`;
         this.lastResponse = null;
         this.sessionAttributes = this.userContext.userAttributes;
 
