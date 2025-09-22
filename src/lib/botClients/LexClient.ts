@@ -1,6 +1,7 @@
 import LexRuntime from 'aws-sdk/clients/lexruntime';
 import get from 'lodash.get';
 import { BotClient } from './BotClient';
+import * as crypto from 'crypto';
 
 export default class LexClient extends BotClient {
     private botName: string;
@@ -15,7 +16,7 @@ export default class LexClient extends BotClient {
         super(botContext, userContext);
         this.botName = this.botContext.botName;
         this.botAlias = this.botContext.botAlias;
-        this.userId = `${this.userContext.userId}-${Date.now()}`;
+        this.userId = `${this.userContext.userId}-${this.generateUUID()}`;
         this.lastResponse = null;
         this.sessionAttributes = this.userContext.userAttributes;
 
@@ -53,5 +54,12 @@ export default class LexClient extends BotClient {
 
     public async fetch(attributePath: string): Promise<string> {
         return await get(this.lastResponse, attributePath);
+    }
+
+    private generateUUID(): string {
+        return crypto
+            .randomBytes(16)
+            .toString('hex')
+            .replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5');
     }
 }
