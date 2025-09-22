@@ -1,4 +1,4 @@
-import LexRuntime from 'aws-sdk/clients/lexruntime';
+import { LexRuntimeServiceClient, PostTextCommand } from '@aws-sdk/client-lex-runtime-service';
 import get from 'lodash.get';
 import { BotClient } from './BotClient';
 
@@ -9,7 +9,7 @@ export default class LexClient extends BotClient {
     private lastResponse: any;
     private sessionAttributes: any;
     private props: any;
-    private lex: LexRuntime;
+    private lex: LexRuntimeServiceClient;
 
     constructor(botContext: any, userContext: any) {
         super(botContext, userContext);
@@ -26,7 +26,7 @@ export default class LexClient extends BotClient {
         this.props.accessKeyId = process.env.chatpickle_access_id || undefined;
         this.props.secretAccessKey = process.env.chatpickle_access_secret || undefined;
 
-        this.lex = new LexRuntime(this.props);
+        this.lex = new LexRuntimeServiceClient(this.props);
         console.log(`[${this.userId}] New Conversation with ${this.botName}`);
     }
 
@@ -41,7 +41,7 @@ export default class LexClient extends BotClient {
             sessionAttributes: this.sessionAttributes,
         };
 
-        this.lastResponse = await this.lex.postText(params).promise();
+        this.lastResponse = await this.lex.send(new PostTextCommand(params));
         this.sessionAttributes = this.lastResponse.sessionAttributes;
 
         const reply: string = this.lastResponse.message.trim();
